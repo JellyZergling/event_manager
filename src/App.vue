@@ -9,7 +9,7 @@
           <v-spacer></v-spacer>
           <v-col cols="auto" class="d-flex align-center justify-center">
             <v-btn
-              v-for="link in links"
+              v-for="link in link"
               :key="link"
               :text="link"
               variant="text"
@@ -45,7 +45,15 @@
           </v-col>
 
           <v-col>
-            <v-sheet min-height="70vh" rounded="lg"> </v-sheet>
+            <v-sheet min-height="70vh" rounded="lg">
+              <div>
+                <ul>
+                  <li v-for="link in links" :key="link.id">
+                    {{ link.fullname }}
+                  </li>
+                </ul>
+              </div>
+            </v-sheet>
           </v-col>
         </v-row>
       </v-container>
@@ -54,7 +62,20 @@
 </template>
 
 <script setup>
-const links = ['Main', 'Messages', 'Profile', 'Updates'];
+const link = ['Main', 'Messages', 'Profile', 'Updates'];
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
+
+const links = ref([]);
+
+onMounted(async () => {
+  try {
+    const response = await axios.get('/api/links');
+    links.value = response.data;
+  } catch (error) {
+    console.error('Error fetching links:', error);
+  }
+});
 </script>
 
 <script>
