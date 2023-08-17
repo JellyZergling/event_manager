@@ -9,7 +9,7 @@
           <v-spacer></v-spacer>
           <v-col cols="auto" class="d-flex align-center justify-center">
             <v-btn
-              v-for="link in link"
+              v-for="link in menuLinks"
               :key="link"
               :text="link"
               variant="text"
@@ -48,8 +48,9 @@
             <v-sheet min-height="70vh" rounded="lg">
               <div>
                 <ul>
-                  <li v-for="link in links" :key="link.id">
-                    {{ link.fullname }}
+                  <li v-for="event in upcomingEvents" :key="event.id">
+                    {{ event.fullname }} - {{ event.startdate }} -
+                    {{ event.enddate }}
                   </li>
                 </ul>
               </div>
@@ -61,24 +62,39 @@
   </v-app>
 </template>
 
-<script setup>
-const link = ['Main', 'Messages', 'Profile', 'Updates'];
+<script setup lang="ts">
 import axios from 'axios';
-import { ref, onMounted } from 'vue';
+import { useFetchLinks } from './data/fetchLinks';
+import type { Link } from './data/fetchLinks';
+import { processDatesInLinks, filterPastEvents } from './data/dataExtract';
+import { onMounted, ref } from 'vue';
 
-const links = ref([]);
+const menuLinks = ['Main', 'Messages', 'Profile', 'Updates'];
+
+const { links } = useFetchLinks();
+let upcomingEvents = ref<Link[]>([]);
+// let pastEvents = [];
 
 onMounted(async () => {
   try {
     const response = await axios.get('/api/links');
-    links.value = response.data;
+    const fetchedLinks = response.data;
+
+    processDatesInLinks(fetchedLinks);
+    links.value = fetchedLinks;
+
+    const { upcoming, past } = filterPastEvents(links.value);
+    upcomingEvents.value = upcoming;
+    // pastEvents.value = past;
+    console.log('Upcoming events:', upcoming);
+    console.log('Past events:', past);
   } catch (error) {
     console.error('Error fetching links:', error);
   }
 });
 </script>
 
-<script>
+<script lang="ts">
 export default {
   data: () => ({
     links: ['Main', 'Messages', 'Profile', 'Updates'],

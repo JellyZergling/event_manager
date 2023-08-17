@@ -14,15 +14,7 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
-    "esModuleInterop": true
-  },
-  "proxy": {
-    "/api": {
-      "target": "http://localhost:3000",
-      "changeOrigin": true,
-      "pathRewrite": {
-        "^/api": ""
-      }
-    }
+    "esModuleInterop": true,
+    "types": ["vite/client"]
   }
 }
