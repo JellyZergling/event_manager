@@ -45,15 +45,29 @@
           </v-col>
 
           <v-col>
-            <v-sheet min-height="70vh" rounded="lg">
-              <div>
-                <ul>
-                  <li v-for="event in upcomingEvents" :key="event.id">
-                    {{ event.fullname }} - {{ event.startdate }} -
-                    {{ event.enddate }}
-                  </li>
-                </ul>
-              </div>
+            <v-sheet min-height="70vh" rounded="lg" class="event-list">
+              <ul>
+                <li v-for="event in upcomingEvents" :key="event.id" class="event-item">
+                  <div class="event-wrapper">
+                    <div class="event-image">
+                      <img :src="getImageForEvent(event.class)" alt="Event Image" />
+                    </div>
+                    <div class="event-info">
+                      <div class="event-name">
+                        {{ event.fullname }}
+                      </div>
+                      <div class="event-date-info">
+                        <div class="d-day">
+                          D-{{ calculateDDay(event.startdate) }}
+                        </div>
+                        <div class="event-date">
+                          {{ event.startdate }} - {{ event.enddate }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
             </v-sheet>
           </v-col>
         </v-row>
@@ -65,6 +79,7 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { useFetchLinks } from './data/fetchLinks';
+import { calculateDDay } from './data/dday';
 import type { Link } from './data/fetchLinks';
 import { processDatesInLinks, filterPastEvents } from './data/dataExtract';
 import { onMounted, ref } from 'vue';
@@ -83,15 +98,24 @@ onMounted(async () => {
     processDatesInLinks(fetchedLinks);
     links.value = fetchedLinks;
 
-    const { upcoming, past } = filterPastEvents(links.value);
-    upcomingEvents.value = upcoming;
+    const { upcomingFiltered, past } = filterPastEvents(links.value);
+    upcomingEvents.value = upcomingFiltered;
     // pastEvents.value = past;
-    console.log('Upcoming events:', upcoming);
+    console.log('Upcoming events:', upcomingFiltered);
     console.log('Past events:', past);
   } catch (error) {
     console.error('Error fetching links:', error);
   }
 });
+
+const getImageForEvent = (eventClass: string) => {
+  if (eventClass === '코믹월드') {
+    return './src/components/comicWorld.png';
+  } else if (eventClass === '일러스타 페스') {
+    return './src/components/illustarFes.png';
+  } else
+  return './src/components/sample_logo1.png';
+};
 </script>
 
 <script lang="ts">

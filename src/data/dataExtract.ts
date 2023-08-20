@@ -1,10 +1,11 @@
 import type { Link } from './fetchLinks';
 
-export function processDatesInLinks(links: Link[]): Link[] {
+export function processDatesInLinks(links: Link[]):{ upcomingFiltered: Link[]; past: Link[];}{
   formatDateInLink(links);
   sortDateInLink(links);
-  links = filterPastEvents(links);
-  return links;
+  const{ upcoming, past } = filterPastEvents(links);
+  const upcomingFiltered = filterUpcomingEvents(upcoming);
+  return { upcomingFiltered, past};
 }
 
 export function formatDateInLink(links: Link[]): void {
@@ -35,7 +36,7 @@ export function filterPastEvents(links: Link[]): {
   upcoming: Link[];
   past: Link[];
 } {
-  const now = new Date();
+  const now = new Date(new Date().toISOString().split('T')[0]);
   const upcoming: Link[] = [];
   const past: Link[] = [];
 
@@ -52,4 +53,28 @@ export function filterPastEvents(links: Link[]): {
     }
   }
   return { upcoming, past };
+}
+
+
+export function filterUpcomingEvents(upcoming: Link[]):Link[]{
+  const upcomingFiltered: Link[] = [];
+  const upcomingMap: Map<string, Link> = new Map();
+  for(const item of upcoming){
+    const key = `${item.class}-${item.region}`
+    if(!upcomingMap.has(key)){
+      upcomingMap.set(key, item);
+    }else{
+      const existingEvent = upcomingMap.get(key);
+      if (existingEvent && existingEvent.startdate > item.startdate) {
+        upcomingMap.set(key, item);
+      }
+    }
+  }
+
+  for (const [, event] of upcomingMap) {
+    upcomingFiltered.push(event);
+  }
+  console.log(upcomingFiltered);
+
+  return upcomingFiltered;
 }
