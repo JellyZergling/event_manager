@@ -77,45 +77,9 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
-import { useFetchLinks } from './data/fetchLinks';
-import { calculateDDay } from './data/dday';
-import type { Link } from './data/fetchLinks';
-import { processDatesInLinks, filterPastEvents } from './data/dataExtract';
-import { onMounted, ref } from 'vue';
+import { callScripts } from './data/script_main';
 
-const menuLinks = ['Main', 'Messages', 'Profile', 'Updates'];
-
-const { links } = useFetchLinks();
-let upcomingEvents = ref<Link[]>([]);
-// let pastEvents = [];
-
-onMounted(async () => {
-  try {
-    const response = await axios.get('/api/links');
-    const fetchedLinks = response.data;
-
-    processDatesInLinks(fetchedLinks);
-    links.value = fetchedLinks;
-
-    const { upcomingFiltered, past } = filterPastEvents(links.value);
-    upcomingEvents.value = upcomingFiltered;
-    // pastEvents.value = past;
-    console.log('Upcoming events:', upcomingFiltered);
-    console.log('Past events:', past);
-  } catch (error) {
-    console.error('Error fetching links:', error);
-  }
-});
-
-const getImageForEvent = (eventClass: string) => {
-  if (eventClass === '코믹월드') {
-    return './src/components/comicWorld.png';
-  } else if (eventClass === '일러스타 페스') {
-    return './src/components/illustarFes.png';
-  } else
-  return './src/components/sample_logo1.png';
-};
+const { menuLinks, upcomingEvents, getImageForEvent, calculateDDay} = callScripts();
 </script>
 
 <script lang="ts">

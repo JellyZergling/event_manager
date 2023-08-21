@@ -36,7 +36,7 @@ export function filterPastEvents(links: Link[]): {
   upcoming: Link[];
   past: Link[];
 } {
-  const now = new Date(new Date().toISOString().split('T')[0]);
+  let now = new Date(new Date().toISOString().split('T')[0]);
   const upcoming: Link[] = [];
   const past: Link[] = [];
 
