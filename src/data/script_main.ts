@@ -2,13 +2,18 @@ import axios from 'axios';
 import { useFetchLinks } from './fetchLinks';
 import type { Link } from './fetchLinks';
 import { processDatesInLinks, filterPastEvents } from './dataExtract';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref} from 'vue';
 import { calculateDDay } from './dday';
 
 export function callScripts(){
-    const menuLinks = ['Main', 'Messages', 'Profile', 'Updates'];
+    const menuLinks = ['Main', 'Artist', 'Connect'];
+    const loginLinks = ['Login', 'Sign Up'];
 
-    const { links } = useFetchLinks(); // 일정 DB 연결
+    return {menuLinks, loginLinks};
+};
+
+export function callScriptsForMain(){
+  const { links } = useFetchLinks(); // 일정 DB 연결
     let upcomingEvents = ref<Link[]>([]);
     // let pastEvents = [];
 
@@ -39,5 +44,10 @@ export function callScripts(){
       return './src/components/sample_logo1.png';
     };
 
-    return {menuLinks, upcomingEvents, getImageForEvent, calculateDDay,};
-};
+    return {upcomingEvents, getImageForEvent, calculateDDay};
+}
+
+export function callMainItems(){
+  const dateOptions = ['Basic', 'All', 'Upcoming', 'Past'];
+  return dateOptions;
+}

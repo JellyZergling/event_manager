@@ -15,7 +15,15 @@
               variant="text"
             ></v-btn>
           </v-col>
-          <v-col cols="auto" class="d-flex align-center"> </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto" class="d-flex align-center justify-center">
+            <v-btn
+              v-for="link in loginLinks"
+              :key="link"
+              :text="link"
+              variant="text"
+            ></v-btn>
+          </v-col>
         </v-row>
       </v-container>
     </v-app-bar>
@@ -27,10 +35,11 @@
             <v-sheet rounded="lg">
               <v-list rounded="lg">
                 <v-list-item
-                  v-for="n in 5"
-                  :key="n"
+                  v-for="listItem in dateOptions"
+                  :key="listItem"
                   link
-                  :title="`List Item ${n}`"
+                  :title="listItem"
+                  @click="handleListItemClick(listItem)"
                 ></v-list-item>
 
                 <v-divider class="my-2"></v-divider>
@@ -39,6 +48,7 @@
                   color="grey-lighten-4"
                   link
                   title="Refresh"
+                  @click="handleListItemClick('Refresh')"
                 ></v-list-item>
               </v-list>
             </v-sheet>
@@ -46,28 +56,7 @@
 
           <v-col>
             <v-sheet min-height="70vh" rounded="lg" class="event-list">
-              <ul>
-                <li v-for="event in upcomingEvents" :key="event.id" class="event-item">
-                  <div class="event-wrapper">
-                    <div class="event-image">
-                      <img :src="getImageForEvent(event.class)" alt="Event Image" />
-                    </div>
-                    <div class="event-info">
-                      <div class="event-name">
-                        {{ event.fullname }}
-                      </div>
-                      <div class="event-date-info">
-                        <div class="d-day">
-                          D-{{ calculateDDay(event.startdate) }}
-                        </div>
-                        <div class="event-date">
-                          {{ event.startdate }} - {{ event.enddate }}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
+              <MainPage :selectedItem="selectedItem" />
             </v-sheet>
           </v-col>
         </v-row>
@@ -77,15 +66,23 @@
 </template>
 
 <script setup lang="ts">
-import { callScripts } from './data/script_main';
+import { callScripts, callMainItems } from './data/script_main';
+import { ref } from 'vue';
+const { menuLinks, loginLinks } = callScripts();
 
-const { menuLinks, upcomingEvents, getImageForEvent, calculateDDay} = callScripts();
+const dateOptions = callMainItems();
+const selectedItem = ref<string>('Basic');
+const handleListItemClick = (item: string) => {
+  selectedItem.value = item;
+};
 </script>
 
 <script lang="ts">
 export default {
-  data: () => ({
-    links: ['Main', 'Messages', 'Profile', 'Updates'],
-  }),
+  components: {
+    data: () => ({
+      links: ['Main', 'Artist', 'Connect'],
+    }),
+  },
 };
 </script>

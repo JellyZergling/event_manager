@@ -1,11 +1,9 @@
 import type { Link } from './fetchLinks';
 
-export function processDatesInLinks(links: Link[]):{ upcomingFiltered: Link[]; past: Link[];}{
+export function processDatesInLinks(links: Link[]){
   formatDateInLink(links);
   sortDateInLink(links);
-  const{ upcoming, past } = filterPastEvents(links);
-  const upcomingFiltered = filterUpcomingEvents(upcoming);
-  return { upcomingFiltered, past};
+  return links ;
 }
 
 export function formatDateInLink(links: Link[]): void {
