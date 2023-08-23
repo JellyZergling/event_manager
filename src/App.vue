@@ -56,7 +56,7 @@
 
           <v-col>
             <v-sheet min-height="70vh" rounded="lg" class="event-list">
-              <MainPage :selectedItem="selectedItem" />
+              <mainpage :selectedItem="selectedItem"/>
             </v-sheet>
           </v-col>
         </v-row>
@@ -68,21 +68,29 @@
 <script setup lang="ts">
 import { callScripts, callMainItems } from './data/script_main';
 import { ref } from 'vue';
-const { menuLinks, loginLinks } = callScripts();
 
+const { menuLinks, loginLinks } = callScripts();
 const dateOptions = callMainItems();
 const selectedItem = ref<string>('Basic');
+
 const handleListItemClick = (item: string) => {
   selectedItem.value = item;
 };
+
 </script>
 
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue';
+import MainPage from './screens/main-page.vue'
+
+export default defineComponent({
   components: {
-    data: () => ({
-      links: ['Main', 'Artist', 'Connect'],
-    }),
+    mainpage: MainPage,
+    data() {
+      return {
+        links: ['Main', 'Artist', 'Connect'],
+      }
+    }
   },
-};
+});
 </script>

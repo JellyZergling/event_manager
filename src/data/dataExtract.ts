@@ -34,7 +34,7 @@ export function filterPastEvents(links: Link[]): {
   upcoming: Link[];
   past: Link[];
 } {
-  let now = new Date(new Date().toISOString().split('T')[0]);
+  const now = new Date(new Date().toISOString().split('T')[0]);
   const upcoming: Link[] = [];
   const past: Link[] = [];
 
@@ -57,8 +57,10 @@ export function filterPastEvents(links: Link[]): {
 export function filterUpcomingEvents(upcoming: Link[]):Link[]{
   const upcomingFiltered: Link[] = [];
   const upcomingMap: Map<string, Link> = new Map();
+
   for(const item of upcoming){
     const key = `${item.class}-${item.region}`
+
     if(!upcomingMap.has(key)){
       upcomingMap.set(key, item);
     }else{
@@ -72,7 +74,6 @@ export function filterUpcomingEvents(upcoming: Link[]):Link[]{
   for (const [, event] of upcomingMap) {
     upcomingFiltered.push(event);
   }
-  console.log(upcomingFiltered);
 
   return upcomingFiltered;
 }

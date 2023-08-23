@@ -1,10 +1,14 @@
-export function calculateDDay(startdate: string) {
-    const eventDate = new Date(startdate);
+export function calculateDDay(startdate: string, enddate: string) {
+    const eventStartDate = new Date(startdate);
+    const eventEndDate = new Date(enddate);
     const today = new Date();
-    const timeDiff = eventDate.getTime() - today.getTime();
-    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-    if(daysDiff === 0){
-        return 'Day';
+
+    const startDiff = Math.ceil((eventStartDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    const endDiff = Math.ceil((eventEndDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+
+    if (startDiff <= 0 && endDiff >= 0) {
+        return 'D-Day';
     }
-    return daysDiff;
+
+    return startDiff > 0 ? `D-${startDiff}` : 'D+';
 }

@@ -11,16 +11,28 @@ export interface Link {
   location: string;
 }
 
-export function useFetchLinks(): { links: Ref<Link[]> } {
-  const links = ref<Link[]>([]);
+interface FetchLinksResult {
+  links: Ref<Link[]>;
+  error: Ref<string | null>;
+}
 
-  onMounted(async () => {
+export function useFetchLinks(): FetchLinksResult {
+  const links = ref<Link[]>([]);
+  const error = ref<string | null>(null);
+
+  async function fetchData() {
     try {
       const response = await axios.get('/api/links');
       links.value = response.data;
-    } catch (error) {
-      console.error('Error fetching links:', error);
+    } catch (err) {
+      error.value = 'Error fetching links';
+      console.error('Error fetching links:', err);
     }
+  }
+
+  onMounted(() => {
+    fetchData();
   });
-  return { links };
+
+  return { links, error };
 }
