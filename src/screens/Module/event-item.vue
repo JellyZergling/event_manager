@@ -1,6 +1,6 @@
 <template>
   <div class="eventData-wrapper">
-    <button @click="handleTestClick">test</button>
+    <button @click="handleTestClick('hi')">test</button>
     <div class="eventData-image">
       <img :src="getImageForEvent(eventData.class)" alt="Event Image" />
     </div>
@@ -27,10 +27,11 @@ const props = defineProps({
   eventData: Object,
   getImageForEvent: Function,
   calculateDDay: Function,
+  selectedItem: String,
 });
 
-function handleTestClick(){
-  console.log('hi');
+function handleTestClick(text:string){
+  console.log(text);
 }
 </script>
 

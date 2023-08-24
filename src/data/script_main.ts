@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { useFetchLinks } from './fetchLinks';
 import type { Link } from './fetchLinks';
 import { processDatesInLinks, filterPastEvents } from './dataExtract';
 import { onMounted, ref} from 'vue';
@@ -17,17 +16,13 @@ export function callScripts(){
   return {menuLinks, loginLinks};
 };
 
-export function callScriptsForMain(){
-  const { links, error } = useFetchLinks(); // 일정 DB 연결
+export function callScriptsForMain(selectedItem: string){
   let upcomingEvents = ref<Link[]>([]);
-  // let pastEvents = [];
-  if (error.value) {
-    console.error('Error fetching links:', error.value);
-  }
+  let pastEvents = ref<Link[]>([]);
   onMounted(async () => {
     try {
       const fetchedLinks = await fetchLinksFromApi();
-      processAndSetLinks(fetchedLinks);
+      processAndSetLinks(fetchedLinks, selectedItem);
     } catch (error) {
       console.error('Error fetching links:', error);
     }
@@ -38,21 +33,21 @@ export function callScriptsForMain(){
     return response.data;
   }
 
-  function processAndSetLinks(fetchedLinks: Link[]) {
-    processDatesInLinks(fetchedLinks);
-    links.value = fetchedLinks;
+  function processAndSetLinks(fetchedLinks: Link[], selectedItem: string) {
+    const{ upcoming, past } = filterPastEvents(fetchedLinks, selectedItem);
+    const processedUpcoming = processDatesInLinks(upcoming);
+    const processedPast = processDatesInLinks(past);
 
-    const { upcoming, past } = filterPastEvents(links.value);
-    upcomingEvents.value = upcoming;
-    // pastEvents.value = past;
-    console.log('Upcoming events:', upcoming);
-    console.log('Past events:', past);
+    upcomingEvents.value = processedUpcoming;
+    pastEvents.value = past;
+    console.log('Upcoming events:', processedUpcoming);
+    console.log('Past events:', processedPast);
   }
 
 
   const getImageForEvent = (eventClass: string) => IMAGE_PATHS[eventClass] || IMAGE_PATHS.default;
 
-  return {upcomingEvents, getImageForEvent, calculateDDay};
+  return {upcomingEvents, pastEvents, getImageForEvent, calculateDDay};
 }
 
 export function callMainItems(){

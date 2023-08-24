@@ -30,11 +30,11 @@ export function sortDateInLink(links: Link[]): Link[] {
   return links;
 }
 
-export function filterPastEvents(links: Link[]): {
+export function filterPastEvents(links: Link[], selectedItem:string): {
   upcoming: Link[];
   past: Link[];
 } {
-  const now = new Date(new Date().toISOString().split('T')[0]);
+  const now = new Date();
   const upcoming: Link[] = [];
   const past: Link[] = [];
 
@@ -42,15 +42,34 @@ export function filterPastEvents(links: Link[]): {
     const startDate = new Date(item.startdate);
     const endDate = new Date(item.enddate);
 
-    if (now >= startDate && now <= endDate) {
-      upcoming.push(item);
-    } else if (startDate > now) {
-      upcoming.push(item);
-    } else {
-      past.push(item);
+    if (selectedItem === 'All'){
+      if (now <= endDate) {
+        upcoming.push(item);
+      } else if (startDate > now) {
+        upcoming.push(item);
+      } else {
+        past.push(item);
+      }
+    }else if(selectedItem === 'Basic' || selectedItem === 'Upcoming'){
+      if (now <= endDate) {
+        upcoming.push(item);
+      }
+    }else if (selectedItem === 'Past'){
+      if (startDate < now) {
+        past.push(item);
+      }
     }
   }
-  return { upcoming, past };
+
+  if (selectedItem === 'All') {
+    return { upcoming, past };
+  } else if (selectedItem === 'Basic' || selectedItem === 'Upcoming') {
+    return { upcoming, past: [] };
+  } else if (selectedItem === 'Past') {
+    return { upcoming: [], past };
+  }
+
+  return { upcoming: [], past: [] };
 }
 
 
