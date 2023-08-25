@@ -16,38 +16,35 @@ export function callScripts(){
   return {menuLinks, loginLinks};
 };
 
-export function callScriptsForMain(selectedItem: string){
-  let upcomingEvents = ref<Link[]>([]);
-  let pastEvents = ref<Link[]>([]);
-  onMounted(async () => {
-    try {
-      const fetchedLinks = await fetchLinksFromApi();
-      processAndSetLinks(fetchedLinks, selectedItem);
-    } catch (error) {
-      console.error('Error fetching links:', error);
-    }
-  });
+export function callVariableForMain(selectedItem: string) {
+  const upcomingEvents = ref<Link[]>([]);
+  const pastEvents = ref<Link[]>([]);
 
   async function fetchLinksFromApi() {
     const response = await axios.get('/api/links');
     return response.data;
   }
 
-  function processAndSetLinks(fetchedLinks: Link[], selectedItem: string) {
-    const{ upcoming, past } = filterPastEvents(fetchedLinks, selectedItem);
-    const processedUpcoming = processDatesInLinks(upcoming);
-    const processedPast = processDatesInLinks(past);
+  async function processAndSetLinks(selectedItem: string) {
+    try {
+      const fetchedLinks = await fetchLinksFromApi();
+      const { upcoming, past } = filterPastEvents(fetchedLinks, selectedItem);
+      const processedUpcoming = processDatesInLinks(upcoming);
+      const processedPast = processDatesInLinks(past);
 
-    upcomingEvents.value = processedUpcoming;
-    pastEvents.value = past;
-    console.log('Upcoming events:', processedUpcoming);
-    console.log('Past events:', processedPast);
+      upcomingEvents.value = processedUpcoming;
+      pastEvents.value = processedPast;
+    } catch (error) {
+      console.error('Error fetching links:', error);
+    }
   }
+  processAndSetLinks(selectedItem);
+  return { upcoming : upcomingEvents, past: pastEvents};
+}
 
-
+export function callScriptsForMain(){
   const getImageForEvent = (eventClass: string) => IMAGE_PATHS[eventClass] || IMAGE_PATHS.default;
-
-  return {upcomingEvents, pastEvents, getImageForEvent, calculateDDay};
+  return {getImageForEvent, calculateDDay}
 }
 
 export function callMainItems(){

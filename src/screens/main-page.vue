@@ -1,7 +1,7 @@
 <template>
   <ul>
-    <li v-for="eventData in allEvents" :key="eventData.id" class="event-item">
-      <button @click="handleTestClick('hi')">{{ selectedItem }}</button>
+    <li v-for="eventData in getFilteredEvents" :key="eventData.id" class="event-item">
+      <button @click="handleTestClick('hi')">{{eventData }}</button>
       <EventItem
         :eventData="eventData"
         :getImageForEvent="getImageForEvent"
@@ -13,9 +13,9 @@
 </template>
 
 <script setup lang="ts">
-import { callScriptsForMain } from '../data/script_main';
 import EventItem from './Module/event-item.vue';
-import { ref, defineProps, watch, watchEffect} from 'vue';
+import { defineProps, ref, watch, onMounted, computed } from 'vue';
+import { callScriptsForMain, callVariableForMain } from '../data/script_main';
 import type { Link } from '../data/fetchLinks';
 
 const props = defineProps({
@@ -24,22 +24,38 @@ const props = defineProps({
     required: true,
   },
 });
+
 const upcomingEvents = ref<Link[]>([]);
 const pastEvents = ref<Link[]>([]);
-let allEvents: Link[] = [];
 
-watchEffect(() => {
-  const { upcomingEvents: upcoming, pastEvents: past, getImageForEvent, calculateDDay } = callScriptsForMain(props.selectedItem);
+async function updateEvents(selectedItem: string) {
+  const { upcoming , past } = await callVariableForMain(selectedItem);
   upcomingEvents.value = upcoming.value;
   pastEvents.value = past.value;
+}
 
-  allEvents = [...upcomingEvents.value, ...pastEvents.value];
+watch(() => props.selectedItem, async (newSelectedItem) => {
+  await updateEvents(newSelectedItem);
 });
 
+onMounted(async () => {
+  await updateEvents(props.selectedItem);
+});
+
+const getFilteredEvents = computed(() => {
+  if (props.selectedItem === 'Upcoming') {
+    return upcomingEvents.value;
+  } else if (props.selectedItem === 'Past') {
+    return pastEvents.value;
+  }
+  return [];
+});
 
 function handleTestClick(text:string){
-  console.log(text);
+  console.log(upcomingEvents);
 }
+
+const {getImageForEvent, calculateDDay} = callScriptsForMain();
 </script>
 
 <script lang="ts">
@@ -50,3 +66,4 @@ export default {
   },
 };
 </script>
+
