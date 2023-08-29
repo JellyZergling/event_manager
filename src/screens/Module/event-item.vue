@@ -1,6 +1,5 @@
 <template>
   <div class="eventData-wrapper">
-    <button @click="handleTestClick('hi')">{{ eventData.fullname }}</button>
     <div class="eventData-image">
       <img :src="getImageForEvent(eventData.class)" alt="Event Image" />
     </div>
@@ -30,10 +29,6 @@ const props = defineProps({
   selectedItem: String,
 });
 
-
-function handleTestClick(text:string){
-  console.log(text);
-}
 </script>
 
 <script lang="ts">

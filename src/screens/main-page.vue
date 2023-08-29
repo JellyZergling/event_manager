@@ -1,7 +1,6 @@
 <template>
   <ul>
     <li v-for="eventData in getFilteredEvents" :key="eventData.id" class="event-item">
-      <button @click="handleTestClick('hi')">{{eventData }}</button>
       <EventItem
         :eventData="eventData"
         :getImageForEvent="getImageForEvent"
@@ -14,7 +13,7 @@
 
 <script setup lang="ts">
 import EventItem from './Module/event-item.vue';
-import { defineProps, ref, watch, onMounted, computed } from 'vue';
+import { defineProps, ref, watch, computed} from 'vue';
 import { callScriptsForMain, callVariableForMain } from '../data/script_main';
 import type { Link } from '../data/fetchLinks';
 
@@ -25,35 +24,32 @@ const props = defineProps({
   },
 });
 
-const upcomingEvents = ref<Link[]>([]);
-const pastEvents = ref<Link[]>([]);
-
-async function updateEvents(selectedItem: string) {
-  const { upcoming , past } = await callVariableForMain(selectedItem);
-  upcomingEvents.value = upcoming.value;
-  pastEvents.value = past.value;
-}
+const upcoming = ref<Link[]>([]);
+const past = ref<Link[]>([]);
 
 watch(() => props.selectedItem, async (newSelectedItem) => {
-  await updateEvents(newSelectedItem);
+  await callEvents(newSelectedItem);
 });
 
-onMounted(async () => {
-  await updateEvents(props.selectedItem);
-});
+async function callEvents(selectedItem: string) {
+  const { upcoming: upcomingData, past: pastData } = await callVariableForMain(selectedItem);
+  upcoming.value = upcomingData;
+  past.value = pastData;
+}
+
+callEvents(props.selectedItem);
 
 const getFilteredEvents = computed(() => {
-  if (props.selectedItem === 'Upcoming') {
-    return upcomingEvents.value;
+  if (props.selectedItem === 'Basic' || props.selectedItem === 'Upcoming') {
+    return upcoming.value;
   } else if (props.selectedItem === 'Past') {
-    return pastEvents.value;
+    return past.value;
+  } else if ( props.selectedItem === 'All') {
+    return [...past.value, ...upcoming.value];
+  } else {
+    return [];
   }
-  return [];
 });
-
-function handleTestClick(text:string){
-  console.log(upcomingEvents);
-}
 
 const {getImageForEvent, calculateDDay} = callScriptsForMain();
 </script>

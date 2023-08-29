@@ -1,8 +1,10 @@
 import axios from 'axios';
 import type { Link } from './fetchLinks';
 import { processDatesInLinks, filterPastEvents } from './dataExtract';
-import { onMounted, ref} from 'vue';
+import { ref } from 'vue';
 import { calculateDDay } from './dday';
+
+// call items ------------------------------------
 
 const IMAGE_PATHS: Record<string, string> = {
   '코믹월드': './src/components/comicWorld.png',
@@ -10,13 +12,25 @@ const IMAGE_PATHS: Record<string, string> = {
   default: './src/components/sample_logo1.png',
 };
 
+export function callScriptsForMain(){
+  const getImageForEvent = (eventClass: string) => IMAGE_PATHS[eventClass] || IMAGE_PATHS.default;
+  return {getImageForEvent, calculateDDay}
+}
+
 export function callScripts(){
   const menuLinks = ['Main', 'Artist', 'Connect'];
   const loginLinks = ['Login', 'Sign Up'];
   return {menuLinks, loginLinks};
 };
 
-export function callVariableForMain(selectedItem: string) {
+export function callMainItems(){
+  const dateOptions = ['Basic', 'All', 'Upcoming', 'Past'];
+  return dateOptions;
+}
+
+// call items ------------------------------------
+
+export async function callVariableForMain(selectedItem: string) {
   const upcomingEvents = ref<Link[]>([]);
   const pastEvents = ref<Link[]>([]);
 
@@ -38,16 +52,8 @@ export function callVariableForMain(selectedItem: string) {
       console.error('Error fetching links:', error);
     }
   }
-  processAndSetLinks(selectedItem);
-  return { upcoming : upcomingEvents, past: pastEvents};
+  await processAndSetLinks(selectedItem);
+
+  return { upcoming : upcomingEvents.value, past: pastEvents.value};
 }
 
-export function callScriptsForMain(){
-  const getImageForEvent = (eventClass: string) => IMAGE_PATHS[eventClass] || IMAGE_PATHS.default;
-  return {getImageForEvent, calculateDDay}
-}
-
-export function callMainItems(){
-  const dateOptions = ['Basic', 'All', 'Upcoming', 'Past'];
-  return dateOptions;
-}
