@@ -1,7 +1,7 @@
 export function calculateDDay(startdate: string, enddate: string) {
   const eventStartDate = new Date(startdate);
   const eventEndDate = new Date(enddate);
-  const today = new Date(); 
+  const today = new Date();
 
   const startDiff = Math.ceil((eventStartDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
   const endDiff = Math.ceil((eventEndDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));

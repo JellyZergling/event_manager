@@ -61,9 +61,31 @@ export function filterPastEvents(links: Link[], selectedItem:string): {
     }
   }
 
-  if (selectedItem === 'All') {
+  if (selectedItem === 'Basic') {
+    const groupedByClassRegion: Record<string, Link[]> = upcoming.reduce((groups, item) => {
+      const key = item.class + '-' + item.region;
+      if (!groups[key]) {
+        groups[key] = [];
+      }
+      groups[key].push(item);
+      return groups;
+    }, {} as Record<string,Link[]>);
+  
+    const upcomingBasic = Object.values(groupedByClassRegion).map(group => {
+      return group.reduce((earliest, item) => {
+        const startDate = new Date(item.startdate);
+        const earliestStartDate = new Date(earliest.startdate);
+        if (startDate < earliestStartDate) {
+          return item;
+        }
+        return earliest;
+      });
+    });
+  
+    return { upcoming: upcomingBasic, past: [] };
+  }else if (selectedItem === 'All') {
     return { upcoming, past };
-  } else if (selectedItem === 'Basic' || selectedItem === 'Upcoming') {
+  } else if (selectedItem === 'Upcoming') {
     return { upcoming, past: [] };
   } else if (selectedItem === 'Past') {
     return { upcoming: [], past };

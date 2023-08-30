@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import "../../assets/main.css";
+import "../../assets/_event-item.scss";
 
 const props = defineProps({
   eventData: Object,

@@ -1,5 +1,3 @@
-@import './base.scss';
-
 #appbar {
   background-color: #333;
   color: white;
@@ -8,4 +6,17 @@
 #appbar-logo {
   height: 10vh;
   filter: invert();
+}
+
+#event-table{
+  display: flow-root;
+  height: 80vh;
+  overflow-y: scroll;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+#event-table::-webkit-scrollbar{
+  display: none;
 }

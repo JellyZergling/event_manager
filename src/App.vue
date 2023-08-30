@@ -55,7 +55,7 @@
           </v-col>
 
           <v-col>
-            <v-sheet min-height="70vh" rounded="lg" class="event-list">
+            <v-sheet rounded="lg" id="event-table">
               <mainpage :selectedItem="selectedItem"/>
             </v-sheet>
           </v-col>
@@ -80,6 +80,7 @@ const handleListItemClick = (item: string) => {
 </script>
 
 <script lang="ts">
+import "./assets/main.css";
 import { defineComponent } from 'vue';
 import MainPage from './screens/main-page.vue'
 

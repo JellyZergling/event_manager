@@ -9,6 +9,9 @@ import { calculateDDay } from './dday';
 const IMAGE_PATHS: Record<string, string> = {
   '코믹월드': './src/components/comicWorld.png',
   '일러스타 페스': './src/components/illustarFes.png',
+  '원신축제':'./src/components/genshin.png',
+  '블루아카이브페스티벌':'./src/components/blueArchive.png',
+  'V-Festival':'./src/components/v_Festival.png',
   default: './src/components/sample_logo1.png',
 };
 
