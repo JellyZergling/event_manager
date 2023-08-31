@@ -7,12 +7,12 @@ import { calculateDDay } from './dday';
 // call items ------------------------------------
 
 const IMAGE_PATHS: Record<string, string> = {
-  '코믹월드': './src/components/comicWorld.png',
-  '일러스타 페스': './src/components/illustarFes.png',
-  '원신축제':'./src/components/genshin.png',
-  '블루아카이브페스티벌':'./src/components/blueArchive.png',
-  'V-Festival':'./src/components/v_Festival.png',
-  default: './src/components/sample_logo1.png',
+  '코믹월드': '/images/comicWorld.png',
+  '일러스타 페스': '/images/illustarFes.png',
+  '원신축제':'/images/genshin.png',
+  '블루아카이브페스티벌':'/images/blueArchive.png',
+  'V-Festival':'/images/v_Festival.png',
+  default: '/images/sample_logo1.png',
 };
 
 export function callScriptsForMain(){
