@@ -4,16 +4,20 @@
       <v-container>
         <v-row class="fill-height">
           <v-col cols="auto" class="d-flex align-center">
-            <img src="./components/sample_logo1.png" id="appbar-logo" />
+            <img src="/images/sample_logo1.png" id="appbar-logo" />
           </v-col>
           <v-spacer></v-spacer>
           <v-col cols="auto" class="d-flex align-center justify-center">
-            <v-btn
-              v-for="link in menuLinks"
-              :key="link"
-              :text="link"
-              variant="text"
-            ></v-btn>
+            <v-btn v-for = "nav in menuLinks"
+              :key="nav.name"
+              :text="nav.name">
+              <RouterLink
+              :to="nav.href"
+              class="nav-item"
+              active-class="active">
+              {{nav.name}}
+              </RouterLink>
+            </v-btn>
           </v-col>
           <v-spacer></v-spacer>
           <v-col cols="auto" class="d-flex align-center justify-center">
@@ -83,13 +87,28 @@ const handleListItemClick = (item: string) => {
 import "./assets/main.css";
 import { defineComponent } from 'vue';
 import MainPage from './screens/main-page.vue'
+import { RouterLink } from 'vue-router';
 
 export default defineComponent({
   components: {
     mainpage: MainPage,
     data() {
       return {
-        links: ['Main', 'Artist', 'Connect'],
+        navigations:[
+          {
+            name : 'Main',
+            href : '/Main',
+          },
+          {
+            name : 'Artist',
+            href : '/Artist',
+          },
+          {
+            name : 'Connect',
+            href : '/Connect',
+          }
+        ]
+        // links: ['Main', 'Artist', 'Connect'],
       }
     }
   },

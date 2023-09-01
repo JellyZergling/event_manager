@@ -21,7 +21,20 @@ export function callScriptsForMain(){
 }
 
 export function callScripts(){
-  const menuLinks = ['Main', 'Artist', 'Connect'];
+  const menuLinks = [
+    {
+      name : 'Main',
+      href : '/main',
+    },
+    {
+      name : 'Artist',
+      href : '/Artist',
+    },
+    {
+      name : 'Connect',
+      href : '/Connect',
+    }
+  ];
   const loginLinks = ['Login', 'Sign Up'];
   return {menuLinks, loginLinks};
 };

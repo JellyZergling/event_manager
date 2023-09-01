@@ -33,7 +33,6 @@ watch(() => props.selectedItem, async (newSelectedItem) => {
 
 async function callEvents(selectedItem: string) {
   const { upcoming: upcomingData, past: pastData } = await callVariableForMain(selectedItem);
-  console.log(past);
   upcoming.value = upcomingData;
   past.value = pastData;
 }

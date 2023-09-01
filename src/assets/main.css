@@ -20,3 +20,11 @@
 #event-table::-webkit-scrollbar{
   display: none;
 }
+
+.nav-item{
+  color: white;
+  text-decoration-line: none;
+}
+.nav-item.active{
+  text-shadow:1px 1px 1px white;
+}
