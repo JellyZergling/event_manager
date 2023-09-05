@@ -70,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { callScripts, callMainItems } from './data/script_main';
+import { callScripts, callMainItems } from './components/script_main';
 import { ref } from 'vue';
 
 const { menuLinks, loginLinks } = callScripts();
@@ -87,11 +87,15 @@ const handleListItemClick = (item: string) => {
 import "./assets/main.css";
 import { defineComponent } from 'vue';
 import MainPage from './screens/main-page.vue'
+import ArtistPage from './screens/artist-page.vue';
+import ConnectPage from './screens/connect-page.vue';
 import { RouterLink } from 'vue-router';
 
 export default defineComponent({
   components: {
     mainpage: MainPage,
+    artistpage: ArtistPage,
+    connectpage: ConnectPage,
     data() {
       return {
         navigations:[

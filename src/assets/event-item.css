@@ -1,11 +1,1 @@
 @import './_event-item.scss';
-
-#appbar {
-  background-color: #333;
-  color: white;
-}
-
-#appbar-logo {
-  height: 10vh;
-  filter: invert();
-}

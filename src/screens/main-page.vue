@@ -14,8 +14,8 @@
 <script setup lang="ts">
 import EventItem from './Module/event-item.vue';
 import { defineProps, ref, watch, computed} from 'vue';
-import { callScriptsForMain, callVariableForMain } from '../data/script_main';
-import type { Link } from '../data/fetchLinks';
+import { callScriptsForMain, callVariableForMain } from '../components/script_main';
+import type { Link } from '../components/fetchLinks';
 
 const props = defineProps({
   selectedItem: {
