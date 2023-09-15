@@ -60,8 +60,6 @@
 
           <v-col>
             <v-sheet rounded="lg" id="event-table">
-              <router-view></router-view>
-              <!-- <mainpage :selectedItem="selectedItem"/> -->
             </v-sheet>
           </v-col>
         </v-row>

@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { } from '../components/script_main';
+import { } from '../components/callItems';
 
 </script>
 <script lang="ts">

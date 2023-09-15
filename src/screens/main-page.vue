@@ -35,14 +35,13 @@
 </template>
 
 <script setup lang="ts">
-import EventItem from './Module/event-item.vue';
+import EventItem from '@/layouts/event-item.vue';
 import { ref, watch, computed } from 'vue';
-import { callScriptsForMain, callVariableForMain, callMainItems  } from '@/components/script_main';
+import { callScriptsForMain, callVariableForMain, callMainItems  } from '@/components/callItems';
 import type { Link } from '@/components/fetchLinks';
 
 const dateOptions = callMainItems();
 const selectedItem = ref<string>('Basic');
-const prevSelectedItem = ref<string>('Basic');
 const upcoming = ref<Link[]>([]);
 const past = ref<Link[]>([]);
 
@@ -59,14 +58,16 @@ const handleListItemClick = (item: string) => {
 watch(selectedItem, callEvents, { immediate: true });
 
 const getFilteredEvents = computed(() => {
-  if (selectedItem.value === 'Basic' || selectedItem.value === 'Upcoming') {
-    return upcoming.value;
-  } else if (selectedItem.value === 'Past') {
-    return past.value;
-  } else if ( selectedItem.value === 'All') {
-    return [...past.value, ...upcoming.value];
-  } else {
-    return [];
+  switch (selectedItem.value) {
+    case 'Basic':
+    case 'Upcoming':
+      return upcoming.value;
+    case 'Past':
+      return past.value;
+    case 'All':
+      return [...past.value, ...upcoming.value];
+    default:
+      return [];
   }
 });
 
@@ -81,4 +82,3 @@ export default {
   },
 };
 </script>
-
